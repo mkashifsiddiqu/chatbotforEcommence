@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <main className='absolute inset-1 flex justify-center items-center'>
-       hello world?
+      Chat bot 
     </main>
   )
 }

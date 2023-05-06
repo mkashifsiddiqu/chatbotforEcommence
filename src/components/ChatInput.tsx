@@ -35,13 +35,13 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
                 },
                 body: JSON.stringify({ message: [message] }),
             })
-              if(!response.ok){
+            if (!response.ok) {
                 throw new Error();
-                  
-              }
+
+            }
             return response.body
         },
-        onMutate(message:any){
+        onMutate(message: any) {
 
             addMessages(message)
         }
@@ -51,7 +51,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
             if (!stream) throw new Error('No Found Stream')
 
             const id = nanoid()
-            const ResponseMesage:any = {
+            const ResponseMesage: any = {
                 id,
                 isUserMassage: false,
                 text: ''
@@ -74,8 +74,8 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
             setTimeout(() => {
                 refTextAuto.current?.focus()
             }, 10)
-        },onError(_,message){
-            console.log('working ..erorr')
+        }, onError(_, message) {
+            console.log('No Internet connection')
             toast.error('Something went wrong please try again later')
             removeMessages(message.id)
             refTextAuto.current?.focus()
@@ -92,13 +92,16 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
                     onKeyDown={(e) => {
                         if (e.key == 'Enter' && !e.shiftKey) {
                             e.preventDefault()
-                            const message: Message = {
-                                id: nanoid(),
-                                isUserMassage: true,
-                                text: input,
-                            }
-                            // mutation 
-                            SendMessage(message)
+                              if(input !== '')
+                              {  const message: Message = {
+                                    id: nanoid(),
+                                    isUserMassage: true,
+                                    text: input,
+                                }
+                                // mutation 
+                                SendMessage(message)
+                          }
+                           
                         }
                     }}
                     disabled={isLoading}
@@ -112,7 +115,19 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
                     <kbd className='inline-flex items-center rounded border bg-white border-gray-200 px-1 font-sans text-xs text-gray-400'>
                         {isLoading
                             ? <Loader2 className='w-3 h-3 animate-spin' />
-                            : <CornerDownLeft className='w-3 h-3' />
+                            : <CornerDownLeft className='w-3 h-3'
+                                onClick={() => {
+                                    if (input !== '') {
+                                        const message: Message = {
+                                            id: nanoid(),
+                                            isUserMassage: true,
+                                            text: input,
+                                        }
+                                        // mutation 
+                                        SendMessage(message)
+                                    }
+
+                                }} />
                         }
                     </kbd>
                 </div>
